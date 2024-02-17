@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -18,17 +18,33 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+ async findOne(@Param('id') id: string) {
+    let userexist = await this.usersService.findOne(id)
+    console.log("users",userexist);
+    if(!userexist){
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+
     return this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    let userexist = await this.usersService.findOne(id)
+    console.log("users",userexist);
+    if(!userexist){
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
     return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
+    let userexist = await this.usersService.findOne(id)
+    console.log("users",userexist);
+    if(!userexist){
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
     return this.usersService.remove(id);
   }
 }
