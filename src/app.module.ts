@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     ConfigModule.forRoot({
       isGlobal:true,
-      envFilePath:[".local.env"]
+      envFilePath:[".env.local"]
     }),
     MongooseModule.forRootAsync({
       imports:[ConfigModule],
